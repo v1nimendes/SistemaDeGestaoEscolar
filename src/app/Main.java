@@ -68,13 +68,19 @@ public class Main {
 			
 			Professor professor = new Professor(nome, materia);
 			
-			System.out.print("Digite o nome da turma: ");
-	        String nomeTurma = sc.nextLine();
-	        
-	        Turma turma = encontrarOuCriarTurma(nomeTurma, turmas);
-	        turma.adicionarProfessor(professor);
-	        professor.adicionarTurma(turma);
-	        
+			System.out.print("Informe em quantas turmas o professor leciona: ");
+			int x = sc.nextInt();
+			
+			for(int i =0; i<x; i++) {
+				System.out.print("Digite o nome da turma: ");
+		        String nomeTurma = sc.nextLine();
+		        sc.next();
+		        
+		        Turma turma = encontrarOuCriarTurma(nomeTurma, turmas);
+		        turma.adicionarProfessor(professor);
+		        professor.adicionarTurma(turma);
+			}
+			
 	        System.out.println("Professor adicionado com sucesso!");
 	        
 	        System.out.println("\nDeseja adicionar outro Professor? (Sim/Nao)");
@@ -95,13 +101,19 @@ public class Main {
 	}
 	
 	private static Turma encontrarOuCriarTurma(String nomeTurma, List<Turma> turmas) {
+		 // Percorre a lista de turmas
         for (Turma turma : turmas) {
+        	// Verifica se o nome da turma atual é igual ao nome procurado	
             if (turma.getNome().equals(nomeTurma)) {
+            	// Se encontrar, retorna a turma existente
                 return turma;
             }
         }
+        // Se não encontrar, cria uma nova turma
         Turma novaTurma = new Turma(nomeTurma);
+     // Adiciona a nova turma à lista de turmas
         turmas.add(novaTurma);
+     // Retorna a nova turma criada
         return novaTurma;
     }
 }
