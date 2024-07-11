@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import entities.Aluno;
-import entities.Materia;
 import entities.Professor;
 import entities.Turma;
 
@@ -75,12 +74,12 @@ public class Main {
 				System.out.print("Digite o nome da turma: ");
 		        String nomeTurma = sc.nextLine();
 		        sc.next();
-		        
+		      
 		        Turma turma = encontrarOuCriarTurma(nomeTurma, turmas);
 		        turma.adicionarProfessor(professor);
 		        professor.adicionarTurma(turma);
 			}
-			
+		        
 	        System.out.println("Professor adicionado com sucesso!");
 	        
 	        System.out.println("\nDeseja adicionar outro Professor? (Sim/Nao)");
@@ -89,7 +88,45 @@ public class Main {
 	}
 	
 	private static void adicionarAluno (Scanner sc, List<Turma> turmas) {
-		
+		String resp = "nao";
+		do {
+			System.out.println("-----------------------------------");
+			System.out.println("      Informações do Aluno");
+			System.out.println("-----------------------------------");
+			System.out.print("\nDigite o nome do aluno: ");
+			sc.next();
+			String nome = sc.nextLine();
+			
+			System.out.print("Digite a matricula do aluno: ");
+			int matricula = sc.nextInt();
+			
+			System.out.println("Digite o nome da turma:");
+			sc.next();
+	        String nomeTurma = sc.nextLine();
+	        
+	        Turma turma = encontrarOuCriarTurma(nomeTurma, turmas);
+	        
+			Aluno aluno = new Aluno(nome, matricula, turma);
+			
+			for (Professor professor : turma.getProfessores()) {
+				System.out.println("Digite as três notas para a matéria " + professor.getMateria() + ":");
+				for (int i = 0; i < 3; i++) {
+					double nota = sc.nextDouble();
+					aluno.adicionarNota(professor.getMateria(), nota);
+				}
+			}
+			
+			System.out.println("Digite o número de faltas do aluno:");
+		    int faltas = sc.nextInt();
+		    aluno.adicionarFalta(faltas);
+
+		    turma.adicionarAluno(aluno);
+		    
+	        System.out.println("Aluno adicionado com sucesso!");
+	        
+	        System.out.println("\nDeseja adicionar outro Aluno? (Sim/Nao)");
+	        resp = sc.next();
+		}while(resp.equalsIgnoreCase("sim"));
 	}
 	
 	private static void listarAlunosPorTurma (Scanner sc, List<Turma> turmas) {
@@ -101,19 +138,13 @@ public class Main {
 	}
 	
 	private static Turma encontrarOuCriarTurma(String nomeTurma, List<Turma> turmas) {
-		 // Percorre a lista de turmas
         for (Turma turma : turmas) {
-        	// Verifica se o nome da turma atual é igual ao nome procurado	
             if (turma.getNome().equals(nomeTurma)) {
-            	// Se encontrar, retorna a turma existente
                 return turma;
             }
         }
-        // Se não encontrar, cria uma nova turma
         Turma novaTurma = new Turma(nomeTurma);
-     // Adiciona a nova turma à lista de turmas
         turmas.add(novaTurma);
-     // Retorna a nova turma criada
         return novaTurma;
     }
 }
